@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jp.motlof.chat.client.Controller">
+   <children>
+      <TextArea fx:id="chat" editable="false" layoutX="14.0" layoutY="41.0" prefHeight="282.0" prefWidth="570.0" />
+      <Button fx:id="connect" layoutX="515.0" layoutY="330.0" mnemonicParsing="false" onAction="#onConnect" prefHeight="25.0" prefWidth="71.0" text="接続" />
+      <TextField fx:id="message" layoutX="97.0" layoutY="361.0" onKeyPressed="#onEnter" prefHeight="25.0" prefWidth="407.0" promptText="自分の気持ちを打ち込むのだ" />
+      <Label layoutX="14.0" layoutY="361.0" prefHeight="25.0" prefWidth="80.0" text="メッセージ">
+         <font>
+            <Font name="Meiryo Bold" size="15.0" />
+         </font>
+      </Label>
+      <TextField fx:id="address" layoutX="98.0" layoutY="330.0" prefHeight="25.0" prefWidth="169.0" promptText="ドメイン使えるかﾜｶﾝﾈ" />
+      <Label layoutX="14.0" layoutY="330.0" prefHeight="25.0" prefWidth="80.0" text="接続先">
+         <font>
+            <Font name="Meiryo Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="293.0" layoutY="330.0" prefHeight="25.0" prefWidth="80.0" text="ポート番号">
+         <font>
+            <Font name="Meiryo Bold" size="15.0" />
+         </font>
+      </Label>
+      <TextField fx:id="port" layoutX="384.0" layoutY="330.0" prefHeight="25.0" prefWidth="120.0" promptText="聞いて" />
+      <Button fx:id="send" layoutX="515.0" layoutY="361.0" mnemonicParsing="false" onAction="#onSend" prefHeight="25.0" prefWidth="71.0" text="送信" />
+      <TextField fx:id="id" layoutX="82.0" layoutY="8.0" prefHeight="25.0" prefWidth="149.0" promptText="10文字以内でｵﾅｼｬｽ" />
+      <Label layoutX="14.0" layoutY="8.0" prefHeight="25.0" prefWidth="62.0" text="UserID">
+         <font>
+            <Font name="Meiryo Bold" size="15.0" />
+         </font>
+      </Label>
+      <Button layoutX="243.0" layoutY="8.0" mnemonicParsing="false" onAction="#onChange" prefHeight="1.0" prefWidth="71.0" text="変更" />
+   </children>
+</AnchorPane>
