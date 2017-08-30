@@ -11,16 +11,19 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import jp.motlof.chat.util.Command;
 
 public class Controller implements Initializable {
 
@@ -30,12 +33,15 @@ public class Controller implements Initializable {
 	TextField message, address, port, id;
 	@FXML
 	Button connect, send;
+	@FXML
+	Label namelabel;
 	
 	public static Controller instance;
 	private static Socket socket = new Socket();
 	private static BufferedReader recive;
 	private static PrintWriter sender;
 	private boolean nowconnect = false;
+	private String name = "None";
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -78,6 +84,7 @@ public class Controller implements Initializable {
 			sender = new PrintWriter(socket.getOutputStream(), true);
 			Reciver reciver = new Reciver(recive, chat);
 			reciver.start();
+			sender.println(Command.createProperty("name", name)+","+Command.createProperty("version", Main.version));
 			chat.appendText("接続されました\r\n");
 			connect.setText("切断");
 			address.setDisable(true);
@@ -110,7 +117,6 @@ public class Controller implements Initializable {
 			return;
 		}
 		sender.println(message.getText());
-		chat.appendText("[me]: "+message.getText()+"\r\n");
 		message.setText("");
 	}
 	
@@ -122,13 +128,16 @@ public class Controller implements Initializable {
 			alert.setContentText("ちゃんと文字列を入力してください");
 			alert.show();
 			return;
-		} else if(id.getText().length() > 10) {
+		} else if(id.getText().getBytes().length > 10) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("エラー");
-			alert.setContentText("10文字以内でお願いします");
+			alert.setContentText("10バイト以内でお願いします");
 			alert.show();
 		}
-		sender.println("%name "+id.getText());
+		if(nowconnect)
+			sender.println(Command.createProperty("name", id.getText()));
+		name = id.getText();
+		namelabel.setText(name);
 		id.setText("");
 	}
 	
@@ -143,7 +152,6 @@ public class Controller implements Initializable {
 				return;
 			}
 			sender.println(message.getText());
-			chat.appendText("[me]: "+message.getText()+"\r\n");
 			message.setText("");
 		}
 	}
@@ -158,13 +166,15 @@ public class Controller implements Initializable {
 		}
 	}
 	
-	public void disconnected() {
-		chat.appendText("切断しました\r\n");
-		connect.setText("接続");
-		address.setDisable(false);
-		port.setDisable(false);
-		message.setDisable(true);
-		send.setDisable(true);
-		nowconnect = false;
+	public void disconnected(String reason) {
+		Platform.runLater(() -> {
+			chat.appendText("切断しました "+reason+"\r\n");
+			connect.setText("接続");
+			address.setDisable(false);
+			port.setDisable(false);
+			message.setDisable(true);
+			send.setDisable(true);
+			nowconnect = false;
+		});
 	}
 }

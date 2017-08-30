@@ -36,5 +36,15 @@
          </font>
       </Label>
       <Button layoutX="243.0" layoutY="8.0" mnemonicParsing="false" onAction="#onChange" prefHeight="1.0" prefWidth="71.0" text="変更" />
+      <Label layoutX="333.0" layoutY="8.0" prefHeight="25.0" prefWidth="43.0" text="名前 :">
+         <font>
+            <Font name="Meiryo Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="namelabel" layoutX="376.0" layoutY="8.0" prefHeight="17.0" prefWidth="201.0" text="&lt;名前を設定してください&gt;">
+         <font>
+            <Font name="Meiryo Bold" size="15.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
+import jp.motlof.chat.util.Command;
 
 public class Reciver extends Thread {
 	BufferedReader in;
@@ -23,8 +24,8 @@ public class Reciver extends Thread {
 		try {
 			while(run) {
 				line = in.readLine();
-				if(line.startsWith("%shutdown")) {
-					Controller.instance.disconnected();
+				if(Command.getProperty(line, "shutdown") != null) {
+					Controller.instance.disconnected(line.split(" ")[1]);
 					continue;
 				}
 				final String text = line;

@@ -9,11 +9,11 @@ public class ChatUser {
 	private UUID uuid;
 	private Color namecolor;
 	
-	public ChatUser(String name) {
+	public ChatUser(String name, String ipaddress) {
 		this.name = name;
-		this.uuid = UUID.randomUUID();
+		this.uuid = UUID.nameUUIDFromBytes(ipaddress.getBytes());
 		if(name == null || name.isEmpty())
-			this.name = "名無しさん@"+uuid.toString().substring(0, 4);
+			this.name = uuid.toString().substring(0, 8);
 	}
 	
 	public String getName() {
