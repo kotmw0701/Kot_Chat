@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import jp.motlof.chat.util.ChatLogger;
 import jp.motlof.chat.util.Command;
@@ -41,7 +43,10 @@ public class EchoThread extends Thread {
 			while((line = in.readLine()) != null) {
 				if(Command.getProperty(line, "name") != null) {
 					line = Command.getProperty(line, "name");
+					String beforename = user.getName();
 					user.setName(line);
+					systemsendAll(Command.createProperty("beforename", beforename)+","+Command.createProperty("newname", user.getName()), true);
+					systemsendAll(beforename+"→"+user.getName()+" に変更されました", false);
 					continue;
 				}
 				System.out.println(user.getName()+ " 受信: "+line);
@@ -63,7 +68,7 @@ public class EchoThread extends Thread {
 	}
 	
 	public String setText(String username, String message) {
-		return ChatLogger.getInstance().getNum()+"	["+username+"]:	"+ message;
+		return (username.equalsIgnoreCase("System") ? "" : ChatLogger.getInstance().getNum())+"	["+username+"]:	"+ replaceCodes(message);
 	}
 	
 	public void send(String text) throws IOException {
@@ -81,13 +86,7 @@ public class EchoThread extends Thread {
 		if(!command)
 			ChatLogger.getInstance().addChatLog("System", message, false);
 		for (EchoThread echoThread : Main.clients)
-			echoThread.send(command ? "" : setText("System", message));
-	}
-	
-	public void sendCmd(String cmd) {
-		if(socket.isClosed())
-			return;
-		out.println(cmd);
+			echoThread.send(command ? message : setText("System", message));
 	}
 	
 	public ChatUser getUser() {
@@ -96,5 +95,22 @@ public class EchoThread extends Thread {
 	
 	public boolean isClosed() {
 		return socket.isClosed();
+	}
+	
+	/*
+	 * %date%
+	 * %time%
+	 * %name%
+	 * %uuid%
+	 * 
+	 */
+	private String replaceCodes(String text) {
+		Calendar cal = new GregorianCalendar();
+		String date = cal.get(Calendar.YEAR)+"/"+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.DAY_OF_MONTH);
+		String time = cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
+		return text.replaceAll("%date%", date)
+				.replaceAll("%time%", time)
+				.replaceAll("%name%", user.getName())
+				.replaceAll("%uuid%", user.getUuid().toString());
 	}
 }

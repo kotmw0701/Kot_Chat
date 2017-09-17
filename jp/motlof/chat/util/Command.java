@@ -10,6 +10,11 @@ public class Command {
 		return null;
 	}
 	
+	public static boolean hasProperty(String property, String pass) {
+		String text = getProperty(property, pass);
+		return (text != null && !text.isEmpty());
+	}
+	
 	public static String createProperty(String pass, String param) {
 		return "%"+pass+"="+param;
 	}

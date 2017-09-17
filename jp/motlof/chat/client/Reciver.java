@@ -24,8 +24,11 @@ public class Reciver extends Thread {
 		try {
 			while(run) {
 				line = in.readLine();
-				if(Command.getProperty(line, "shutdown") != null) {
+				if(Command.hasProperty(line, "shutdown")) {
 					Controller.instance.disconnected(line.split(" ")[1]);
+					continue;
+				} else if(Command.hasProperty(line, "beforename") && Command.hasProperty(line, "newname")) {
+					Controller.instance.updateName(Command.getProperty(line, "beforename"), Command.getProperty(line, "newname"));
 					continue;
 				}
 				final String text = line;

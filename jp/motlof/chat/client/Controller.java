@@ -166,6 +166,14 @@ public class Controller implements Initializable {
 		}
 	}
 	
+	public void updateName(String beforename,String newname) {
+		Platform.runLater(() -> {
+			String text = chat.getText().replaceAll(beforename, newname);
+			chat.clear();
+			chat.setText(text);
+		});
+	}
+	
 	public void disconnected(String reason) {
 		Platform.runLater(() -> {
 			chat.appendText("切断しました "+reason+"\r\n");

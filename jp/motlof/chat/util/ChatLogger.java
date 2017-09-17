@@ -39,7 +39,9 @@ public class ChatLogger {
 	public void addChatLog(String name, String text, boolean add) {
 		try(PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(logfile, true),"UTF-8"))){
 			Calendar cal = new GregorianCalendar();
-			String time = cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
+			String time = cal.get(Calendar.HOUR_OF_DAY)+":"
+					+(String.valueOf(cal.get(Calendar.MINUTE)).length()<2 ? "0"+cal.get(Calendar.MINUTE) : cal.get(Calendar.MINUTE))+":"
+					+(String.valueOf(cal.get(Calendar.SECOND)).length()<2 ? "0"+cal.get(Calendar.SECOND) : cal.get(Calendar.SECOND));
 			String convert = pattern;
 			writer.println(convert.replaceAll("%num%", String.valueOf((add ? ++num : "")))
 					.replaceAll("%time%", time)
